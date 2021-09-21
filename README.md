@@ -1,2 +1,2 @@
-# DecentralizedAI-
-Decentralized AI
+# Decentralized AI
+Decentralized AI...
