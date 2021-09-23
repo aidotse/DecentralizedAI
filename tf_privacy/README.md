@@ -1,6 +1,6 @@
 # Differential Privacy together with TensorFlow 2.x.
 
-This tutorial exemplifies the use of the (TensorFlow Privacy)[https://github.com/tensorflow/privacy] together with the model structure as recommended for (Tensorflow 2.x.)[https://www.tensorflow.org/]
+This tutorial exemplifies the use of the [TensorFlow Privacy](https://github.com/tensorflow/privacy) together with the model structure as recommended for [Tensorflow 2.x.](https://www.tensorflow.org/)
 
 ## Dependencies
 
@@ -17,3 +17,14 @@ Both libraries can easily be installed by:
 ```
 pip install scipy tensorflow-privacy
 ```
+
+## Usage
+
+## Results
+
+![](images//mlp_no-dp.png.png "Multi-Layer Perceptron (MLP) without Differentially Privacy (DP)") ![](images//mlp_dp.png.png "Multi-Layer Perceptron (MLP) with Differentially Privacy (DP)") 
+
+![](images//cnn_no-dp.png.png "Convolutional Neural Network (CNN) without Differentially Privacy (DP)") ![](images//cnn_dp.png.png "Convolutional Neural Network (CNN) with Differentially Privacy (DP)") 
+
+
+## References
