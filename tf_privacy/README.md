@@ -15,5 +15,5 @@ In addition, the following prerequisites are required:
 Both libraries can easily be installed by:
 
 ```
-pip install scipy, tensorflow-privacy
+pip install scipy tensorflow-privacy
 ```
