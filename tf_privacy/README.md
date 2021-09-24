@@ -13,11 +13,13 @@ The introduced distraction should be immense enough that it is capable of protec
 In the case of learning algorithms, differential privacy is, practically, achieved by injecting noise during the training of a model. For example, in the case of _Differentially Private Stochastic Gradient Descent_(DP-SGD)[[1]](#references) (as used in the code examples in this repository), the approach for bolster _differential privacy_ is to apply noise to the computed _gradients of the loss_ (with respect to the model parameters), using the following steps:
 
 1. Clip gradients, per training example included in a batch, to ensure each gradient has a known _maximum Euclidean norm_.
+
 2. Add _random noise_ to the clipped gradients.
 
 Consequently, there are two parameters that affect the _privacy_ in this approach:
 
 * __L2 Norm Clipping__: the cumulative gradient across all network parameters, from each batch, will be clipped so that its _L2 Norm_ is at most this value.
+
 * __Noise Multiplier__: governs the amount of noise added during training. Generally, more noise results in better privacy and lower utility.
 
 ## Dependencies
@@ -41,6 +43,7 @@ pip install scipy tensorflow-privacy
 The example code in this repository is using the __MNIST__ dataset (for now), to illustrate how the training metrics (_loss_ and _accuracy_) are affected by the use of _differential privacy_. The code example support (for now) two types of model structures: 
 
 1. Fully connected _Multi-Layer Perceptron_ (MLP), and... 
+
 2. Simple _Convolutional Neural Network_ (CNN). 
 
 All model structures are befined (using the [TensorFlow Functional API](https://www.tensorflow.org/guide/keras/functional)) in the file `model.py`. Training a model and visualizing the training metrics is simply done by:
@@ -50,15 +53,21 @@ All model structures are befined (using the [TensorFlow Functional API](https://
 The above command will train a model with default parameters. However, both the use of model, as well as parameters regarding the training of the model, can be changed through various command-line arguments:
 
 *  `--model {mlp,cnn}` &emsp; &emsp;...type of learning model used, either _MLP_ or _CNN_ (_datatype:_ `string`, _default_: `mlp`).  
-*  `--opt {sgd,adam}` &emsp; &emsp; ..._optimizer_ used for training, either _SGD_ or _Adam_ (_datatype:_ `string`, _default_: `sgd`).
+
+*  `--opt {sgd,adam}` &emsp; &emsp; ..._optimizer_ used for training, either _SGD_ or _Adam_ (_datatype:_ `string`, _default_: `sgd.
+
 *  `--lr N` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ..._learning rate_ for the training  (_datatype:_ `float`, _default_: `0.1`).
+
 *  `--epochs N`&emsp; &emsp; &emsp; &emsp;...number of training _epochs_ (_datatype:_ `int`, _default_: `15`) 
+
 *  `--batch-size N` &emsp; &emsp;  ...training _batch size_ (_datatype:_ `int`, _default_: `32`)
+
 *  `--dp` / `--no-dp` &emsp; &emsp; ...using _differential privacy_ or not (_default_: `dp`).
 
 In addition, there are two command-line arguments specified for training with _differential privacy_ (se section __What is Differential Privacy?__ above):
   
 *  `--l2_norm_clip N` &emsp; &emsp; ...clipping norm (_datatype:_ `float`, _default_: `0.9`).
+
 *  `--noise_mult N` &emsp; &emsp; &emsp;...ratio of the _standard deviation_ to the clipping norm (_datatyp:_ `float`, _default_: `0.9`).
 
 For example, training a _CNN model_ with _differential privacy_ using an _SGD optimizer_ for _30 epochs_, can be done by the following command:
@@ -82,6 +91,7 @@ The images below are a couple of examples of the resulting outputs of running th
 In the examples above, the measure of _privacy_ is expressed through `epsilon`. Practically applied, the measure for _differential privacy guarantee_ is expressed through the following two parameters [[2]](#references):
 
 * `delta` -- bounds the probability of our _privacy guarantee_ not holding. A fixed value set, as a rule of thumb, to be less than the inverse of the training data size (i.e., the population size).
+
 * `epsilon` -- measures the strength of our _privacy guarantee_. In the case of differentially private machine learning, it gives a bound on how much the probability of particular model output can vary by including (or removing) a single training sample.  
 
 Given a fixed _delta_ value for a model, the _epsilon_ is calculated based on the _batch size_, _noise multiplier_, and the current number of _trained epochs_. Hence, as seen in the examples above, the strength of the _privacy guarantee_ (_epsilon_) of a trained model is linearly proportional to the number of trained epochs - meaning an increased probability of variety in model output, for a singular training sample, with respect to the number of trained epochs. 
