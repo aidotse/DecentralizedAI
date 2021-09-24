@@ -6,7 +6,7 @@ This tutorial exemplifies the use of the [TensorFlow Privacy](https://github.com
 
 The general aim of _differential privacy_ is to avail sensitive data, e.g., data containing people's personal information, without divulging the personal identification of individuals. This can be achieved by introducing a minimum distraction to the data of a sensitive dataset. 
 
-&emsp; &emsp; "  ...differential privacy forms data anonymously via injecting noise into the dataset studiously."_
+&emsp; &emsp; _"  ...differential privacy forms data anonymously via injecting noise into the dataset studiously."_
      
 The introduced distraction should be immense enough that it is capable of protecting privacy, while at the same time limited enough so that the data is still useful for analysis.
 
