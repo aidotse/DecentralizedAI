@@ -79,7 +79,14 @@ The images below are a couple of examples of the resulting outputs of running th
 
 ### How to Measure Privacy? 
 
- &emsp; &emsp; _...will be added vedry soon._
+In the examples above, the measure of _privacy_ is expressed through `epsilon`. Practically applied, the measure for _differential privacy guarantee_ is expressed through the following two parameters [[2]](#references):
+
+* `delta` -- bounds the probability of our _privacy guarantee_ not holding. A fixed value set, as a rule of thumb, to be less than the inverse of the training data size (i.e., the population size).
+* `epsilon` -- measures the strength of our _privacy guarantee_. In the case of differentially private machine learning, it gives a bound on how much the probability of particular model output can vary by including (or removing) a single training sample.  
+
+Given a fixed _delta_ value for a model, the _epsilon_ is calculated based on the _batch size_, _noise multiplier_, and the current number of _trained epochs_. Hence, as seen in the examples above, the strength of the _privacy guarantee_ (_epsilon_) of a trained model is linearly proportional to the number of trained epochs - meaning an increased probability of variety in model output, for a singular training sample, with respect to the number of trained epochs. 
+
+Interpreting the _epsilon_ value is, however, at times difficult. The value is merely an _indication of privacy_ for a trained model. In reality, the likelihood of a certain output for a single training sample must further be confirmed, e.g., by purposely insert secrets in the training dataset and measure the likelihood that those secrets are leaked during inference [[3]](#references).
 
 ## Further Reading
 
@@ -87,3 +94,7 @@ A detailed tutorial regarding the technical details of _Machine Learning with Di
 
 ## References
 [1] M. Abadi, et al. ["Deep learning with differential privacy."](https://dl.acm.org/doi/pdf/10.1145/2976749.2978318?casa_token=HLroUey_9GQAAAAA:XJpCJz8GF9AZFuOaMoDEqy-aKWpnYUKBHhPy1bwvP709x0l6ofIs_NuhAyhd5pDsxxOxBwLc_kk) Proceedings of the 2016 ACM SIGSAC conference on computer and communications security. 2016.
+
+[2] I. Mironov, T. Kunal, and Z. Li. ["Rényi Differential Privacy of the Sampled Gaussian Mechanism."](https://arxiv.org/pdf/1908.10530.pdf) arXiv preprint arXiv:1908.10530. 2019.
+
+[3] N. Carlini, et al. ["The secret sharer: Evaluating and testing unintended memorization in neural networks."](https://www.usenix.org/system/files/sec19-carlini.pdf) 28th USENIX Security Symposium (USENIX Security 19). 2019.
