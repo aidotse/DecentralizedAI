@@ -22,9 +22,9 @@ pip install scipy tensorflow-privacy
 
 ## Results
 
-![](images//mlp_no-dp.png.png "Multi-Layer Perceptron (MLP) without Differentially Privacy (DP)") ![](images//mlp_dp.png.png "Multi-Layer Perceptron (MLP) with Differentially Privacy (DP)") 
+![](./images/mlp_no-dp.png "Multi-Layer Perceptron (MLP) without Differentially Privacy (DP)") ![](./images/mlp_dp.png "Multi-Layer Perceptron (MLP) with Differentially Privacy (DP)") 
 
-![](images//cnn_no-dp.png.png "Convolutional Neural Network (CNN) without Differentially Privacy (DP)") ![](images//cnn_dp.png.png "Convolutional Neural Network (CNN) with Differentially Privacy (DP)") 
+![](./images/cnn_no-dp.png "Convolutional Neural Network (CNN) without Differentially Privacy (DP)") ![](./images/cnn_dp.png "Convolutional Neural Network (CNN) with Differentially Privacy (DP)") 
 
 
 ## References
