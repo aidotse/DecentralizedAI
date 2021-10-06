@@ -23,7 +23,7 @@
     <param name="learning_rate" type="double" value="$(arg learning_rate)" />
     <param name="batch_size"    type="int"    value="$(arg batch_size)" />
     <param name="epochs"        type="int"    value="$(arg epochs)" />
-    <param name="dataset_percentage" type="double" value="0.1" />
+    <param name="dataset_portion" type="double" value="0.5" />
   </node>
 
   <!-- CLient B -->
@@ -31,7 +31,7 @@
     <param name="learning_rate" type="double" value="$(arg learning_rate)" />
     <param name="batch_size"    type="int"    value="$(arg batch_size)" />
     <param name="epochs"        type="int"    value="$(arg epochs)" />
-    <param name="dataset_percentage" type="double" value="0.1" />
+    <param name="dataset_portion" type="double" value="0.5" />
   </node>
 
 </launch>

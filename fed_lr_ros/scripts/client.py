@@ -31,7 +31,7 @@ class Client:
         self.learning_rate = rospy.get_param('~learning_rate', 0.01)
         self.epochs = rospy.get_param('~epochs', 1)
         self.batch_size = rospy.get_param('~batch_size', 32)
-        percentage = rospy.get_param('~dataset_percentage', 0.1)
+        portion = rospy.get_param('~dataset_portion', 0.1)
 
         # Format client name (for output purposes)
         self.name = rospy.get_name()
@@ -45,7 +45,7 @@ class Client:
         try:
             
             # Request data
-            resp = get_dataset(percentage, "train")
+            resp = get_dataset(portion, "train")
             self.x, self.y = [], []
             for s in resp.dataset:
                 x, y = msg_to_np(s)

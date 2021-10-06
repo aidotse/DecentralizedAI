@@ -45,7 +45,7 @@ class Server:
         try:
             
             # Request data
-            resp = get_dataset(0.1, 'test')
+            resp = get_dataset(1.0, 'test')
             self.x, self.y = [], []
             for s in resp.dataset:
                 x, y = msg_to_np(s)
