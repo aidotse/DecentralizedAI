@@ -1,0 +1,5 @@
+float32 percentage
+string part
+---
+uint8 num_classes
+dataset_msgs/Sample[] dataset
