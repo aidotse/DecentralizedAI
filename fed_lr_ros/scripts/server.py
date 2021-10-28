@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File       : server.py
-# Modified   : 05.10.2021
+# Modified   : 28.10.2021
 # By         : Andreas Persson <andreas.persson@ai.se>
 
+import rospy
 import numpy as np
 import tensorflow as tf
-from model import SequentialModel
-from model import categorical_loss, probability_model
 from sklearn.metrics import accuracy_score
-
-import rospy
-from fed_lr_ros.srv import GetDataset
-from fed_lr_ros.srv import GetCombinedWeights as GetCombinedWeightsRequest, GetCombinedWeightsResponse
-from fed_lr_ros.srv import SetScaledWeights as SetScaledWeightsRequest, SetScaledWeightsResponse
-
-from std_msgs.msg import UInt8MultiArray, MultiArrayDimension
-from utils import msg_to_np, msg_to_weights, weights_to_msg
+from models.model import SequentialModel, ProbabilityModel
+from models.model import categorical_loss 
+from dataset_msgs.srv import GetDataset
+from model_msgs.srv import GetCombinedWeights as GetCombinedWeightsRequest, GetCombinedWeightsResponse
+from model_msgs.srv import SetScaledWeights as SetScaledWeightsRequest, SetScaledWeightsResponse
+from utils.utils import msg_to_np, msg_to_weights, weights_to_msg
 
 # GPU memory allocation
 physical_devices = tf.config.list_physical_devices('GPU')
@@ -31,6 +28,7 @@ class Server:
     def __init__(self):
 
         # Get private ROS parameters
+        model_type = rospy.get_param('~model', 'mlp')
         comm_rounds = rospy.get_param('~comm_rounds', 15)
         
         # Set global ROS parameters
@@ -45,7 +43,7 @@ class Server:
         try:
             
             # Request data
-            resp = get_dataset(1.0, 'test')
+            resp = get_dataset(0.2, 'test')
             self.x, self.y = [], []
             for s in resp.dataset:
                 x, y = msg_to_np(s)
@@ -71,8 +69,9 @@ class Server:
             rospy.logerr("[Server::init] {}".format(e))
 
         # Initalize global model weights
-        self.model = SequentialModel.build(input_shape = self.x.shape[1:], num_classes = self.num_classes)
-        self.model.summary()
+        self.model = SequentialModel.build( model_type = model_type,
+                                            input_shape = self.x.shape[1:],
+                                            num_classes = self.num_classes )
         self.weights = self.model.get_weights()
 
         # Dictionary for storing scaled weights from client(s)
@@ -196,7 +195,7 @@ class Server:
             rate.sleep()
 
         # Make some predictions to verify the global model (before shutting down)
-        self.model = probability_model(self.model)
+        self.model = ProbabilityModel(self.model)
         res = self.model(self.x[:10])
         rospy.logwarn("[Server::shutdown] Verify global model...")
         for predictions, labels in zip(list(res), self.y[:10]):

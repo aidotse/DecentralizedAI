@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File       : client.py
-# Modified   : 05.10.2021
+# Modified   : 28.10.2021
 # By         : Andreas Persson <andreas.persson@ai.se>
 
+import rospy
 import numpy as np
 import tensorflow as tf
-from model import SequentialModel
-from model import optimizer, categorical_loss
-
-import rospy
-from fed_lr_ros.srv import GetDataset, GetCombinedWeights, SetScaledWeights
-from fed_lr_ros.msg import Weights
-from std_msgs.msg import UInt8MultiArray, MultiArrayDimension
-from utils import msg_to_np, msg_to_weights, weights_to_msg
+from models.model import SequentialModel
+from models.model import optimizer, categorical_loss
+from dataset_msgs.srv import GetDataset
+from model_msgs.srv import GetCombinedWeights, SetScaledWeights
+from utils.utils import msg_to_np, msg_to_weights, weights_to_msg
 
 # GPU memory allocation
 physical_devices = tf.config.list_physical_devices('GPU')
@@ -28,6 +26,8 @@ class Client:
     def __init__(self):
 
         # Get private ROS parameters
+        model_type = rospy.get_param('~model', 'mlp')
+        dp = rospy.get_param('~dp', False)
         self.learning_rate = rospy.get_param('~learning_rate', 0.01)
         self.epochs = rospy.get_param('~epochs', 1)
         self.batch_size = rospy.get_param('~batch_size', 32)
@@ -82,7 +82,12 @@ class Client:
         self.rounds = 0
 
         # Create a local model
-        self.model = SequentialModel.build(input_shape = self.x.shape[1:], num_classes = self.num_classes)
+        self.model = SequentialModel.build( model_type = model_type,
+                                            input_shape = self.x.shape[1:],
+                                            num_classes = self.num_classes,
+                                            dp = dp )
+        rospy.loginfo("[{}::init] Model summary: ".format(self.name))
+        self.model.summary()
 
         # Compile the model
         self.model.compile(

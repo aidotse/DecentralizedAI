@@ -1,6 +1,6 @@
 # Federated Learning using Robot Operating System (ROS)
 
-This repository constitute a testbed environment for training [TensorFlow](https://www.tensorflow.org/) models in federated settings using the communication protocols available in the [Robot Operating System](https://www.ros.org/).
+This repository constitute a testbed environment for training [TensorFlow](https://www.tensorflow.org/) models in *federated learning* settings using the communication protocols available in the [Robot Operating System](https://www.ros.org/).
 
 
 ### What is ROS? 

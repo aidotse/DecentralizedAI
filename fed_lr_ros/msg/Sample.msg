@@ -1,2 +1,0 @@
-byte label
-std_msgs/UInt8MultiArray data
