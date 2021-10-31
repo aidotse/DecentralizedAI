@@ -2,9 +2,9 @@
 
 This is the repository for the overarching strategic program [Decentralized AI](https://www.ai.se/en/projects-9/decentralized-ai). So far, this repository contains the following sub-folders:
 
-* [__fed_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/fed_lr_ros) -- a testbed for traning TF model in *federated learning* settings using ROS.
+* [__fed_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/fed_lr_ros) -- a testbed for traning TensorFlow models in *federated learning* settings using ROS.
 
-* [__sarm_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/fed_lr_ros) -- a testbed for traning TF model in *swarm learning* settings using ROS.
+* [__swarm_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/fed_lr_ros) -- a testbed for traning TensorFlow models in *swarm learning* settings using ROS.
 
 * [__common__](https://github.com/aidotse/DecentralizedAI/tree/main/common) -- common ROS mesages, utils, and packages used by both the *swarm learning* and the *federeated learning* testbed.
 
