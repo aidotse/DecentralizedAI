@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File       : server.py
-# Modified   : 28.10.2021
+# Modified   : 12.11.2021
 # By         : Andreas Persson <andreas.persson@ai.se>
 
 import rospy
@@ -21,7 +21,7 @@ for device in physical_devices:
     tf.config.experimental.set_memory_growth(device, True)
   
 '''
-Wrapper class for loading datasets.
+Class for a server in federated learning settings.
 '''
 class Server:
 
