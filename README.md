@@ -68,8 +68,8 @@ source /opt/ros/noetic/setup.bash
 
 Next, create and build a catkin workspace:
 ```
-mkdir -p catkin_ws/src
-cd catkin_ws/
+mkdir -p ~/ai_sweden_ws/src
+cd ~/ai_sweden_ws/
 catkin_make
 ```
 
