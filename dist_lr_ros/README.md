@@ -10,13 +10,15 @@ For this particular testbed, ROS is, purely, used to simplify the communication 
 
 ## Usage
 
-To train a joint model using two workers that jointly learning to classify handwritten digits using the _MNIST_ dataset (only supported, for now), simply open a terminal a launch:
+To train a joint model using two workers that jointly learning to classify handwritten digits using the _MNIST_ dataset (only supported, for now), simply open a terminal and launch:
 
 ```
+cd ~/ai_sweden_ws/
+source devel/setup.bash
 roslaunch dist_lr_ros simple.launch
 ```
 
-_Note:_ don't forget to source the workspace (ata least once): `source devel/setup.bash`
+_Note:_ ROS environment setup (through `source devel/setup.bash`), is required, but only required once for each terminal!
 
 
 
