@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Global parameters -->
+  <arg name="model"            default="mlp"   />
+  <arg name="dp"               default="false" doc="Use of diffirentla privacy (or not)." />
+  <arg name="learning_rate"    default="0.01"  />
+  <arg name="batch_size"       default="32"    />
+  <arg name="epochs"           default="10"    doc="Training epochs for each communcation round." />
+  <arg name="comm_rounds"      default="15"    doc="Total number of communcation rounds." />
+
+  <!-- Federated server (including dataset loader) -->	
+  <include file="$(find fed_lr_ros)/launch/server.launch">
+    <arg name="model"        value="$(arg model)" />
+    <arg name="comm_rounds"  value="$(arg comm_rounds)" />
+  </include>
+  
+  <!-- Federated client(s) -->
+  <!-- Note: name must be unique for each client -->
+
+  <!-- Client A -->
+  <include file="$(find fed_lr_ros)/launch/client.launch">
+    <arg name="model"            value="$(arg model)" />
+    <arg name="learning_rate"    value="$(arg learning_rate)" />
+    <arg name="batch_size"       value="$(arg batch_size)" />
+    <arg name="epochs"           value="$(arg epochs)" />
+
+    <!-- Specific parameters (for each client) -->  
+    <arg name="name"             value="client_a_node" />
+    <arg name="dataset_portion"  value="0.5" />
+  </include>
+
+  <!-- Client B -->
+  <include file="$(find fed_lr_ros)/launch/client.launch">
+    <arg name="model"            value="$(arg model)" />
+    <arg name="learning_rate"    value="$(arg learning_rate)" />
+    <arg name="batch_size"       value="$(arg batch_size)" />
+    <arg name="epochs"           value="$(arg epochs)" />
+
+    <!-- Specific parameters (for each client) -->  
+    <arg name="name"             value="client_b_node" />
+    <arg name="dataset_portion"  value="0.5" />
+  </include>
+
+</launch>

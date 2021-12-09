@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Global parameters -->
+  <arg name="name"             />
+  <arg name="model"            default="mlp"   />
+  <arg name="dp"               default="false" doc="Use of diffirentla privacy (or not)." />
+  <arg name="learning_rate"    default="0.01"  />
+  <arg name="batch_size"       default="32"    />
+  <arg name="epochs"           default="10"    doc="Training epochs for each communcation round." />
+  <arg name="dataset_portion"  default="0.5"   doc="Portion of the total dataset." />
+
+  <!-- Federated client -->
+  <!-- Note: name must be unique for each client -->
+  <node name="$(arg name)" pkg="fed_lr_ros" type="client.py" output="screen">
+    <param name="model"           type="str"    value="$(arg model)" />
+    <param name="dp"              type="bool"   value="$(arg dp)" />
+    <param name="learning_rate"   type="double" value="$(arg learning_rate)" />
+    <param name="batch_size"      type="int"    value="$(arg batch_size)" />
+    <param name="epochs"          type="int"    value="$(arg epochs)" />
+    <param name="dataset_portion" type="double" value="$(arg dataset_portion)" />
+  </node>
+
+</launch>
