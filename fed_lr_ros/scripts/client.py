@@ -142,7 +142,7 @@ class Client:
     Initializing ROS loop - keeps running until the node is stopped (or training is done).
     '''
     def run(self):
-        rate = rospy.Rate(10) # 10h
+        rate = rospy.Rate(1) # 1 hz
         while not rospy.is_shutdown():
 
             # Check if server is on next communcation round
@@ -154,6 +154,9 @@ class Client:
                     get_weights = rospy.ServiceProxy('/weights/request', GetCombinedWeights)
                     try:
                         resp = get_weights(self.name)
+                        if not resp.weights.data:
+                            rate.sleep()
+                            continue
                         weights = msg_to_weights(resp.weights)                
                     except rospy.ServiceException as e:
                         rospy.logerr("[{}::run] {}".format(self.name, e))

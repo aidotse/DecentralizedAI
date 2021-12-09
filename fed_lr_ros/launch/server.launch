@@ -2,16 +2,18 @@
 <launch>
 
   <!-- Global parameters -->
-  <arg name="model"            default="mlp"   />
-  <arg name="comm_rounds"      default="15"    doc="Total number of communcation rounds." />
-
+  <arg name="model"             default="mlp"   />
+  <arg name="comm_rounds"       default="15"    doc="Total number of communcation rounds." />
+  <arg name="expected_clients"                  doc="Number of communcation expectred clients." />
+       
   <!-- Dataset loader -->	
   <node name="data_loader_node" pkg="data_loader" type="dataset.py" output="screen" />
 
   <!-- Federated server -->	
   <node name="server_node" pkg="fed_lr_ros" type="server.py" output="screen">
-    <param name="model"       type="str" value="$(arg model)" />
-    <param name="comm_rounds" type="int" value="$(arg comm_rounds)" />
+    <param name="model"            type="str" value="$(arg model)" />
+    <param name="comm_rounds"      type="int" value="$(arg comm_rounds)" />
+    <param name="expected_clients" type="int" value="$(arg expected_clients)" />
   </node>
 
 </launch>

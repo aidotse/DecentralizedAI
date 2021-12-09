@@ -30,6 +30,7 @@ class Server:
         # Get private ROS parameters
         model_type = rospy.get_param('~model', 'mlp')
         comm_rounds = rospy.get_param('~comm_rounds', 15)
+        self.expected_clients = rospy.get_param('~expected_clients', -1)
         
         # Set global ROS parameters
         self.rounds = 1
@@ -43,7 +44,7 @@ class Server:
         try:
             
             # Request data
-            resp = get_dataset(0.2, 'test')
+            resp = get_dataset(1.0, 'test')
             self.x, self.y = [], []
             for s in resp.dataset:
                 x, y = msg_to_np(s)
@@ -76,11 +77,14 @@ class Server:
 
         # Dictionary for storing scaled weights from client(s)
         self.scaled_weights_list = {}
+
+        # List for keeping track of the number of clients (based on client names)
+        self.unique_clients = []
             
         # Advertise ROS services for requesting and updating weights
         self.request_srv = rospy.Service('/weights/request', GetCombinedWeightsRequest, self.request)
         self.update_srv = rospy.Service('/weights/update', SetScaledWeightsRequest, self.update)
-        
+
         # Start ROS loop
         self.run()
 
@@ -91,6 +95,10 @@ class Server:
         try:
             rospy.loginfo("[Server::request] Got request for global weights from client: '{}'.".format(req.name))
 
+            # Add client name to list of unique clients
+            if req.name not in self.unique_clients:
+                self.unique_clients.append(req.name)
+
             # Initalize weights list with client name
             self.scaled_weights_list[req.name] = None
             
@@ -98,7 +106,10 @@ class Server:
             resp = GetCombinedWeightsResponse()
             
             # Add global weights
-            resp.weights = weights_to_msg(self.weights)
+            if len(self.unique_clients) < self.expected_clients:
+                rospy.loginfo("[Server::request] Waiting for {} more client(s) before starting the training...".format(self.expected_clients - len(self.unique_clients)))
+            else:
+                resp.weights = weights_to_msg(self.weights)
 
             # Return response to caller
             return resp
@@ -168,7 +179,7 @@ class Server:
     Initializing ROS loop - keeps running until the node is stopped (or training is done).
     '''
     def run(self):
-        rate = rospy.Rate(10) # 10h
+        rate = rospy.Rate(1) # 1 hz
         while not rospy.is_shutdown():
             if self.ready():
 

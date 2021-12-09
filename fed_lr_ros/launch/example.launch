@@ -11,8 +11,9 @@
 
   <!-- Federated server (including dataset loader) -->	
   <include file="$(find fed_lr_ros)/launch/server.launch">
-    <arg name="model"        value="$(arg model)" />
-    <arg name="comm_rounds"  value="$(arg comm_rounds)" />
+    <arg name="model"             value="$(arg model)" />
+    <arg name="comm_rounds"       value="$(arg comm_rounds)" />
+    <arg name="expected_clients"  value="2" />
   </include>
   
   <!-- Federated client(s) -->
