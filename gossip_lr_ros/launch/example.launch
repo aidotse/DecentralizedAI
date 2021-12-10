@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Global parameters -->
+  <arg name="model"            default="mlp"   />
+  <arg name="dp"               default="false" doc="Use of diffirentla privacy (or not)." />
+  <arg name="learning_rate"    default="0.01"  />
+  <arg name="batch_size"       default="32"    />
+  <arg name="epochs"           default="15"    doc="Training epochs for each client." />
+
+  <!-- Dataset loader -->	
+  <node name="data_loader_node" pkg="data_loader" type="dataset.py" output="screen" />
+
+  <!-- Gossip clients(s) -->
+  <!-- Note: name must be unique for each worker -->
+
+  <!-- Client A -->
+  <include file="$(find gossip_lr_ros)/launch/client.launch">
+    <arg name="model"            value="$(arg model)" />
+    <arg name="learning_rate"    value="$(arg learning_rate)" />
+    <arg name="batch_size"       value="$(arg batch_size)" />
+    <arg name="epochs"           value="$(arg epochs)" />
+    <arg name="expected_clients"  value="2" />
+    
+    <!-- Specific parameters (for each client) -->  
+    <arg name="name"             value="client_a_node" />
+    <arg name="dataset_portion"  value="0.5" />
+  </include>
+  
+  <!-- Client B -->
+  <include file="$(find gossip_lr_ros)/launch/client.launch">
+    <arg name="model"            value="$(arg model)" />
+    <arg name="learning_rate"    value="$(arg learning_rate)" />
+    <arg name="batch_size"       value="$(arg batch_size)" />
+    <arg name="epochs"           value="$(arg epochs)" />
+    <arg name="expected_clients"  value="2" />
+    
+    <!-- Specific parameters (for each client) -->  
+    <arg name="name"             value="client_b_node" />
+    <arg name="dataset_portion"  value="0.5" />
+  </include>
+
+</launch>

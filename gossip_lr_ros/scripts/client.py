@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File       : client.py
-# Modified   : 12.11.2021
+# Modified   : 10.12.2021
 # By         : Andreas Persson <andreas.persson@ai.se>
 
 import rospy
@@ -13,7 +13,7 @@ from models.model import optimizer, categorical_loss
 from dataset_msgs.srv import GetDataset
 from model_msgs.srv import GetCombinedWeights as GetCombinedWeightsRequest, GetCombinedWeightsResponse
 from tokens import TokenHandler
-from dist_lr_ros.msg import TokenQueue
+from gossip_lr_ros.msg import TokenQueue
 from utils.utils import msg_to_np, msg_to_weights, weights_to_msg
 
 # GPU memory allocation
@@ -22,9 +22,9 @@ for device in physical_devices:
     tf.config.experimental.set_memory_growth(device, True)
 
 '''
-Class for a worker in distributed learning settings. 
+Class for a client in gossip learning settings. 
 '''
-class Worker:
+class Client:
 
     def __init__(self):
 
@@ -35,7 +35,8 @@ class Worker:
         self.epochs = rospy.get_param('~epochs', 1)
         self.batch_size = rospy.get_param('~batch_size', 32)
         portion = rospy.get_param('~dataset_portion', 0.1)
-
+        self.expected_clients = rospy.get_param('~expected_clients', -1)
+        
         # Format client name (for output purposes)
         self.name = rospy.get_name()
         self.name = self.name.strip('/').rstrip('node')
@@ -120,14 +121,14 @@ class Worker:
     Callback function for handling training order by tokens.
     '''
     def callback(self, msg):
-        self.tokens.update(msg.tokens)
+        self.tokens.update(msg.tokens, self.expected_clients)
                             
     '''
-    Remote procedure callback function for requesting weights from worker.
+    Remote procedure callback function for requesting weights from client.
     '''
     def request(self, req):
         try:
-            rospy.loginfo("[{}::request] Got request for weights from worker: '{}'.".format(self.name, req.name))
+            rospy.loginfo("[{}::request] Got request for weights from client: '{}'.".format(self.name, req.name))
            
             # Create response object
             resp = GetCombinedWeightsResponse()
@@ -146,13 +147,13 @@ class Worker:
     Initializing ROS loop - keeps running until the node is stopped (or training is done).
     '''
     def run(self):
-        rate = rospy.Rate(10) # 10h
+        rate = rospy.Rate(11) # 1 hz
         while not rospy.is_shutdown() and not self.tokens.done():
 
-            # Start the traning if all workser hve reached consensus in training order
+            # Start the traning if all clients have reached consensus in training order
             if self.tokens.trainable():
 
-                # Check if worker is next in training queue
+                # Check if client is next in training queue
                 if self.tokens.next():
                     
                     # Request weights
@@ -170,7 +171,7 @@ class Worker:
                         except rospy.ServiceException as e:
                             rospy.logerr("[{}::run] {}".format(self.name, e))
 
-                    # Fit worker model
+                    # Fit client model
                     self.model.fit( self.train_x,
                                     self.train_y,
                                     epochs = 1,
@@ -187,8 +188,13 @@ class Worker:
 
                     # Pop token from the queue 
                     self.tokens.pop()
+
+            # Wating for clients
+            else:
+                rospy.loginfo("[{}::run] Waiting for more client(s) before starting the training...".format(self.name))
+
                     
-            # Publish worker token
+            # Publish client token
             msg = TokenQueue()
             msg.tokens = self.tokens.tokens
             self.token_pub.publish(msg)
@@ -208,8 +214,8 @@ class Worker:
 Main fn
 '''
 if __name__ == '__main__':
-    rospy.init_node('worker_node', anonymous=True)
+    rospy.init_node('client_node', anonymous = True)
     try:
-        node = Worker()
+        node = Client()
     except rospy.ROSInterruptException:
         pass

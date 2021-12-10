@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>dist_lr_ros</name>
-  <version>0.0.1</version>
+  <name>gossip_lr_ros</name>
+  <version>0.0.2</version>
   
-  <description>The Distributed Learning (DL) ROS package</description>
+  <description>The Gossip Learning (GL) ROS package</description>
   <maintainer email="andreas.persson@ai.se">Andreas Pdersson</maintainer>
 
   <license>MIT</license>

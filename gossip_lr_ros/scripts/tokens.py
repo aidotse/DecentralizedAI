@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File       : client.py
-# Modified   : 12.11.2021
+# Modified   : 10.12.2021
 # By         : Andreas Persson <andreas.persson@ai.se>
 
 import rospy
 from dist_lr_ros.msg import Token
 
 '''
-Class for handle tokens used for determine training order among workers.
+Class for handle tokens used for determine training order among clients.
 '''
 class TokenHandler:
 
@@ -60,7 +60,7 @@ class TokenHandler:
     '''
     Function for updating the overall queue of tokens
     '''
-    def update(self, tokens):
+    def update(self, tokens, num_expected_clients):
 
         # Remove tokens removed by another worker
         self._tokens = [t for t in self._tokens if t.name == self._name or self.__contain(t, tokens)]
@@ -113,9 +113,11 @@ class TokenHandler:
             self._tokens[0].previously = ""
         
         # Check if worker is trainable
-        for t in self._tokens:
-            if t.name == self._name and t.epoch == self._epochs:
-                self._trainable = True
+        token_names = [t.name for t in self._tokens]
+        if len(set(token_names)) == num_expected_clients:
+            for t in self._tokens:
+                if t.name == self._name and t.epoch == self._epochs:
+                    self._trainable = True
                         
     '''
     "Private" helper functions for checking if a queue of tokens contians a certain token.
