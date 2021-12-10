@@ -20,7 +20,7 @@ roslaunch gossip_lr_ros example.launch
 
 __*Note:*__ ROS environment setup (through `source devel/setup.bash`), is required, but only required once for each terminal!
 
-In the example above, both clients are launched through the same ROS launch file. The clients can instead be launched separately and with different parameters. For a more advanced example of jointly training a CNN model using wo clients, use the following steps:
+In the example above, both clients are launched through the same ROS launch file. The clients can instead be launched separately and with different parameters. For a more advanced example of jointly training a CNN model using two clients, use the following steps:
 
 1. In a terminal, launch the first `client`:
 ```
