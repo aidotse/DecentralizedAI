@@ -5,9 +5,9 @@ So far, this repository contains the following sub-folders:
 
 * [__fed_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/fed_lr_ros): a testbed for traning TensorFlow models in *federated learning* settings using ROS.
 
-* [__dist_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/dist_lr_ros): a general testbed for traning TensorFlow models in *distributed learning* settings using ROS.
+* [__gossip_lr_ros__](https://github.com/aidotse/DecentralizedAI/tree/main/gossip_lr_ros): a general testbed for traning TensorFlow models in *gossip learning* settings using ROS.
 
-* [__common__](https://github.com/aidotse/DecentralizedAI/tree/main/common): common ROS mesages, utils, and packages used by both the *distributed learning* and the *federeated learning* testbed.
+* [__common__](https://github.com/aidotse/DecentralizedAI/tree/main/common): common ROS mesages, utils, and packages used by both the *gossip learning* and the *federeated learning* testbed.
 
 * [__tf_privacy__](https://github.com/aidotse/DecentralizedAI/tree/main/tf_privacy): a rudimentary tutorial for using _differential privacy_ together with TensorFlow 2.x.
 
