@@ -44,8 +44,3 @@ rosrun data_loader dataset.py
 ```
 
 __*Tip:*__ the example with separate clients can also be launched across several physical devices (assuming that the [ROS network](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) has been configured accordingly).
-
-
-
-
-
